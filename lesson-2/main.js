@@ -2,8 +2,8 @@ class ProductList {
     constructor(container = '.products') {
         this.container = container;
         this.goods = [];
-        this._fetchProducts();//рекомендация, чтобы метод был вызван в текущем классе
-        this.render();//вывод товаров на страницу
+        this._fetchProducts();
+        this.render();
     }
     _fetchProducts() {
         this.goods = [
@@ -48,11 +48,20 @@ class ProductItem {
     }
 }
 class BasketList {
-
+    constructor(container = '.basket') {
+        this.container = container;
+        this.basket = [];
+        this._fillProducts(); //Функция заполняет массив basket (корзину)
+        this.render(); // Функция отрисовывает новую корзину
+    }
 }
 
 class BasketItem {
-
+    constructor(product, count) {
+        this.id = product.id;
+        this.title = product.title;
+        this.price = product.price;
+        this.count = product.count;
+    }
 }
 let list = new ProductList();
-console.log(list.getSumPrice());
