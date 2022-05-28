@@ -1,67 +1,167 @@
-class ProductList {
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+const basketBtn = document.querySelector('.btn-cart');
+
+
+class ProductsList {
     constructor(container = '.products') {
         this.container = container;
-        this.goods = [];
-        this._fetchProducts();
-        this.render();
+        this.goods = [];//массив товаров из JSON документа
+        this._getProducts()
+            .then(data => { //data - объект js
+                this.goods = data;
+                //                 console.log(data);
+                this.render()
+            });
     }
-    _fetchProducts() {
-        this.goods = [
-            { id: 1, title: 'Notebook', price: 2000 },
-            { id: 2, title: 'Mouse', price: 20 },
-            { id: 3, title: 'Keyboard', price: 200 },
-            { id: 4, title: 'Gamepad', price: 50 },
-        ];
-    }
+    /**
+     * Функция для получения списка товаров
+     * @returns Вовращает колекцию каталога товаров из удаленного файла json
+     */
+    _getProducts() {
 
+        return fetch(`${API}/catalogData.json`)
+            .then(result => result.json())
+            .catch(error => {
+                console.log(error);
+            });
+
+    }
+    /**
+     * Функция для получения суммы стоимости товаров
+     * @returns Возвращает сумму товаров
+     */
+    calcSum() {
+        return this.allProducts.reduce((accum, item) => accum += item.price, 0);
+    }
+    /**
+     * Функция, для отрисовки каталога товара
+     */
     render() {
         const block = document.querySelector(this.container);
         for (let product of this.goods) {
-            const item = new ProductItem(product);
-            block.insertAdjacentHTML("beforeend", item.render());
+            const productObj = new ProductItem(product);
+            //            this.allProducts.push(productObj);
+            block.insertAdjacentHTML('beforeend', productObj.render());
         }
-    }
 
-    getSumPrice() {
-        let result = null;
-        this.goods.forEach(good => {
-            result += good.price;
-        })
-        return result;
     }
 }
+
 
 class ProductItem {
     constructor(product, img = 'https://via.placeholder.com/200x150') {
-        this.title = product.title;
-        this.id = product.id;
+        this.title = product.product_name;
         this.price = product.price;
+        this.id = product.id_product;
         this.img = img;
+        this.initHandle();
     }
+    /**
+     * Получение разметки товара
+     * @returns Возвращает разметку для элемента каталога товаров
+     */
     render() {
-        return `<div class="product-item">
+        return `<div class="product-item" data-id="${this.id}">
+                <img src="${this.img}" alt="Some img">
+                <div class="desc">
                     <h3>${this.title}</h3>
-                    <img src="${this.img}">
-                    <p>${this.price}</p>
+                    <p>${this.price} $</p>
                     <button class="buy-btn">Купить</button>
+                </div>
             </div>`
     }
+    // initHandle() {
+    //     const block = document.querySelector('.products')
+    //     block.addEventListener('click', (event) => {
+    //         if (event.target.tagName !== 'BUTTON') {
+    //             return;
+    //         }
+    //         this.addToBasket();
+    //     });
+    // }
 }
+
 class BasketList {
     constructor(container = '.basket') {
         this.container = container;
-        this.basket = [];
-        this._fillProducts(); //Функция заполняет массив basket (корзину)
-        this.render(); // Функция отрисовывает новую корзину
+        this.goods = [];//массив корзины из JSON документа
+        this._getProducts()
+            .then(data => { //data - объект js
+                this.goods = data;
+                //                 console.log(data);
+            });
+        this.initHandle();
+    }
+    /**
+     * Функция получения товаров корзины из удаленного файла json
+     * @returns Вовращает коллекцию товаров
+     */
+    _getProducts() {
+
+        return fetch(`${API}/getBasket.json`)
+            .then(result => result.json())
+            .catch(error => {
+                console.log(error);
+            });
+
+    }
+    /**
+     * Функция отрисовывает корзину товаров
+     */
+    renderBasket() {
+        const block = document.querySelector(this.container);
+        for (let product of this.goods.contents) {
+            const productObj = new BasketItem(product);
+
+            const baskeEl = block
+                .querySelector(`.product-item[data-id="${productObj.id}"]`);
+
+            if (!baskeEl) {
+                block.insertAdjacentHTML('beforeend', productObj.render());
+            }
+        }
+    }
+
+    /**
+     * Функция назначает обработчик на кнопку Корзина
+     */
+    initHandle() {
+        basketBtn.addEventListener('click', () => {
+            const block = document.querySelector(this.container);
+            document.querySelector('.basketLine').classList.toggle('hidden');
+            block.classList.toggle('hidden');
+            if (!block.classList.contains('hidden')) {
+                this.renderBasket();
+            }
+        })
     }
 }
 
 class BasketItem {
-    constructor(product, count) {
-        this.id = product.id;
-        this.title = product.title;
+    constructor(product, img = 'https://via.placeholder.com/200x150') {
+        this.title = product.product_name;
         this.price = product.price;
-        this.count = product.count;
+        this.id = product.id_product;
+        this.img = img;
+        this.quantity = product.quantity;
+    }
+    /**
+     * Функция для получения разметки элемента корзины
+     * @returns Возвращает html разметку для корзины
+     */
+    render() {
+        return `<div class="product-item" data-id="${this.id}">
+                    <h3>${this.title}</h3>
+                    <img src="${this.img}" alt="Some img">
+                    <div class="desc">
+                        <p>${this.price} $</p>
+                        <p>Колличество: ${this.quantity}</p>
+                        <button class="buy-btn">Купить</button>
+                    </div>
+            </div>`
     }
 }
-let list = new ProductList();
+let list = new ProductsList();
+let basketList = new BasketList();
+console.log(list.allProducts);
+
