@@ -42,8 +42,25 @@ class ProductsList {
             const productObj = new ProductItem(product);
             //            this.allProducts.push(productObj);
             block.insertAdjacentHTML('beforeend', productObj.render());
+            this.initHandle(productObj);
         }
+    }
+    initHandle(product) {
+        const element = document.getElementById(`${product.id}`);
+        element.addEventListener('click', (event) => {
+            if (event.target.tagName !== 'BUTTON') {
+                return;
+            }
+            this.addToBasket(product);
+        });
 
+    }
+
+    addToBasket(product) {
+        if (!(product in basketList.goods)) {
+            basketList.goods.contents.push(product);
+        }
+        console.log(basketList.goods.contents);
     }
 }
 
@@ -54,14 +71,13 @@ class ProductItem {
         this.price = product.price;
         this.id = product.id_product;
         this.img = img;
-        this.initHandle();
     }
     /**
      * Получение разметки товара
      * @returns Возвращает разметку для элемента каталога товаров
      */
     render() {
-        return `<div class="product-item" data-id="${this.id}">
+        return `<div class="product-item" id="${this.id}" data-price="${this.price}" data-title="${this.title}">
                 <img src="${this.img}" alt="Some img">
                 <div class="desc">
                     <h3>${this.title}</h3>
@@ -70,15 +86,6 @@ class ProductItem {
                 </div>
             </div>`
     }
-    // initHandle() {
-    //     const block = document.querySelector('.products')
-    //     block.addEventListener('click', (event) => {
-    //         if (event.target.tagName !== 'BUTTON') {
-    //             return;
-    //         }
-    //         this.addToBasket();
-    //     });
-    // }
 }
 
 class BasketList {
