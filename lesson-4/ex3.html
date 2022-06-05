@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ex3</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            margin: 30px auto;
+            width: 50vw;
+        }
+
+        input {
+            height: 50px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            height: 50px;
+            background-color: white;
+            border-radius: 50px;
+            margin: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: antiquewhite;
+        }
+
+        .error {
+            border: 3px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="#">
+        <input type="text" data-name="name" id="1" placeholder="Иван">
+        <input type="tel" data-name="phone" id="2" placeholder="+7(000)000-0000">
+        <input type="email" data-name="email" id="3" placeholder="test@mail.ru">
+        <textarea name="" id="4" cols="30" rows="10"></textarea>
+        <button type="submit">Отправить</button>
+    </form>
+    <script>
+        const inputs = document.querySelectorAll('input');
+        const InputsObj = [
+            { name: inputs[0], check: /[а-яА-яa-zA-Z]/i },
+            { name: inputs[1], check: /(\+7\(\d{3,3}\)\d{3,3}\-\d{4,4})/ig },
+            { name: inputs[2], check: /^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$/ig },
+        ]
+        function checkInputs() {
+            InputsObj.forEach(element => {
+                element.check.test(element.name.value)
+                    ? element.name.classList.remove('error')
+                    : element.name.classList.add('error');
+            })
+        }
+
+        document.querySelector('form').addEventListener('submit', event => {
+            checkInputs();
+            event.preventDefault();
+        });
+    </script>
+</body>
+
+</html>
