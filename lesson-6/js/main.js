@@ -60,6 +60,9 @@ const app = new Vue({
                     this.$data.cartItems.push(item);
                 }
 
+            })
+            .catch(error => {
+                alert(error);
             });
         this.getJson(`${API + this.catalogUrl}`)
             .then(data => {
@@ -67,6 +70,9 @@ const app = new Vue({
                     this.$data.products.push(item);
                     this.$data.filtered.push(item);
                 }
+            })
+            .catch(error => {
+                alert(error);
             });
     }
 
