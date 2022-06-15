@@ -15,8 +15,8 @@ app.use('/api/cart', cart);
 
 app.get('/api/products', (req, res) => {
     fs.readFile('server/db/products.json', 'utf-8', (err, data) => {
-        if(err){
-            res.sendStatus(404, JSON.stringify({result:0, text: err}));
+        if (err) {
+            res.sendStatus(404, JSON.stringify({ result: 0, text: err }));
         } else {
             res.send(data);
         }
@@ -28,5 +28,5 @@ app.get('/api/products', (req, res) => {
 //     res.send(req.query);
 // });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listen on port ${port}...`));
