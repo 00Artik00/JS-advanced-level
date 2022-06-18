@@ -1,0 +1,38 @@
+[
+  {
+    "id_product": 1,
+    "product_name": "Elery man",
+    "price": 50,
+    "imgUrl": "../images/featured/featured-item-1.jpg"
+  },
+  {
+    "id_product": 2,
+    "product_name": "Elery woman",
+    "price": 75,
+    "imgUrl": "../images/featured/featured-item-2.jpg"
+  },
+  {
+    "id_product": 3,
+    "product_name": "Elery new",
+    "price": 24,
+    "imgUrl": "../images/featured/featured-item-3.jpg"
+  },
+  {
+    "id_product": 4,
+    "product_name": "Elery new man",
+    "price": 60,
+    "imgUrl": "../images/featured/featured-item-4.jpg"
+  },
+  {
+    "id_product": 5,
+    "product_name": "Elery girl",
+    "price": 125,
+    "imgUrl": "../images/featured/featured-item-5.jpg"
+  },
+  {
+    "id_product": 6,
+    "product_name": "Elery new girl",
+    "price": 70,
+    "imgUrl": "../images/featured/featured-item-6.jpg"
+  }
+]
